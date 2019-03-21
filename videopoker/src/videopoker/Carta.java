@@ -48,6 +48,7 @@ public class Carta {
 	
 	@Override
 	public String toString() {
-		return naipe.simbolo + " " + valor.simbolo;
+		return naipe.simbolo + valor.simbolo;
 	}
+	
 }
