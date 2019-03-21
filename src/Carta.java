@@ -1,6 +1,4 @@
-package videopoker;
-
-public class Carta {
+public class Carta implements Comparable<Carta> {
 	
 	public static enum Naipe {
 		PAUS("♣"), COPAS("♥"), ESPADAS("♠"), OUROS("♦");
@@ -45,10 +43,23 @@ public class Carta {
 	public Valor getValor() {
 		return valor;
 	}
-	
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Carta) {
+			return ((Carta) obj).naipe == this.naipe && ((Carta) obj).valor == this.valor;
+		}
+		return false;
+	}
+
 	@Override
 	public String toString() {
 		return naipe.simbolo + valor.simbolo;
 	}
-	
+
+	@Override
+	public int compareTo(Carta carta) {
+		return carta.naipe == this.naipe ? carta.valor.ordinal() - this.valor.ordinal() :
+				carta.naipe.ordinal() - this.naipe.ordinal();
+	}
 }

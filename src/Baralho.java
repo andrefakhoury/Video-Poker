@@ -1,12 +1,10 @@
-package videopoker;
-
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Baralho {
 
-	private final List<Carta> baralho;
+	private LinkedList<Carta> baralho;
 	
 	public Baralho() {
 		Carta.Naipe[] naipes = Carta.Naipe.values();
@@ -31,7 +29,7 @@ public class Baralho {
 	public Carta[] getHand(int n) {
 		Carta[] hand = new Carta[n];
 		for (int i = 0; i < n; i++) {
-			hand[i] = baralho.remove(0);
+			hand[i] = baralho.removeFirst();
 		}
 		return hand;
 	}
