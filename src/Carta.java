@@ -59,7 +59,6 @@ public class Carta implements Comparable<Carta> {
 
 	@Override
 	public int compareTo(Carta carta) {
-		return carta.naipe == this.naipe ? carta.valor.ordinal() - this.valor.ordinal() :
-				carta.naipe.ordinal() - this.naipe.ordinal();
+		return valor == carta.valor ? naipe.ordinal() - carta.naipe.ordinal() : valor.ordinal() - carta.valor.ordinal();
 	}
 }
