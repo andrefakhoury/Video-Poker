@@ -33,15 +33,66 @@ public class Hand {
         Carta[] ordHand = Arrays.copyOf(hand, hand.length);
 
         Arrays.sort(ordHand);
-        int qttPares = 0;
+        if (royal(ordHand) && straight(ordHand) && flush(ordHand)) return 200;
+        if (straight(ordHand) && flush(ordHand)) return 100;
+        if (quadra(ordHand)) return 50;
+        if (fullHand(ordHand)) return 20;
+        if (flush(ordHand)) return 10;
+        if (straight(ordHand)) return 5;
+        if (trica(ordHand)) return 2;
+        if (doisPares(ordHand)) return 1;
+
+        return 0;
+    }
+    
+    private static boolean doisPares(Carta[] ordHand) {
+    	int qttPares = 0;
         for (int i = 1; i < ordHand.length; i++) {
             if (ordHand[i].equals(ordHand[i-1])) {
                 qttPares++;
                 i++;
             }
         }
-        if (qttPares == 2) return 2;
-
-        return 0;
+        return qttPares >= 2;
+    }
+    
+    private static boolean trica(Carta[] ordHand) {
+    	return false;
+    }
+    
+    private static boolean quadra(Carta[] ordHand) {
+    	return false;
+    }
+    
+    private static boolean fullHand(Carta[] ordHand) {
+    	return false;
+    }
+    
+    private static boolean straight(Carta[] ordHand) {
+    	for (int i = 1; i < ordHand.length; i++) {
+    		if (ordHand[i].getValor().ordinal() - ordHand[i - 1].getValor().ordinal() != 1) {
+    			return false;
+    		}
+    	}
+    	return true;
+    }
+    
+    private static boolean flush(Carta[] ordHand) {
+    	for (int i = 1; i < ordHand.length; i++) {
+    		if (ordHand[i].getNaipe() != ordHand[i - 1].getNaipe()) {
+    			return false;
+    		}
+    	}
+    	return true;
+    }
+    
+    private static boolean royal(Carta[] ordHand) {
+    	int ord = Carta.Valor.V10.ordinal();
+    	for (int i = 0; i < ordHand.length; i++) {
+    		if (ordHand[i].getValor().ordinal() != ord + i) {
+    			return false;
+    		}
+    	}
+    	return true;
     }
 }
