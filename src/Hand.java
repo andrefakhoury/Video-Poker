@@ -1,5 +1,6 @@
-import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 
 public class Hand {
     private Baralho baralho;
@@ -39,60 +40,107 @@ public class Hand {
         if (fullHand(ordHand)) return 20;
         if (flush(ordHand)) return 10;
         if (straight(ordHand)) return 5;
-        if (trica(ordHand)) return 2;
+        if (trinca(ordHand)) return 2;
         if (doisPares(ordHand)) return 1;
 
         return 0;
     }
-    
+
     private static boolean doisPares(Carta[] ordHand) {
-    	int qttPares = 0;
+        int qttPares = 0;
         for (int i = 1; i < ordHand.length; i++) {
-            if (ordHand[i].equals(ordHand[i-1])) {
+            if (ordHand[i].getValor() == ordHand[i-1].getValor()) {
                 qttPares++;
                 i++;
             }
         }
         return qttPares >= 2;
     }
-    
-    private static boolean trica(Carta[] ordHand) {
-    	return false;
+
+    private static boolean trinca(Carta[] ordHand) {
+        int qtd = 1;
+
+        for (int i = 1; i < ordHand.length; i++) {
+            if (ordHand[i].getValor() == ordHand[i-1].getValor())
+                qtd++;
+            else {
+                qtd = 1;
+            }
+
+            if (qtd == 3)
+                return true;
+        }
+
+        return false;
     }
-    
+
     private static boolean quadra(Carta[] ordHand) {
-    	return false;
+        int qtd = 1;
+
+        for (int i = 1; i < ordHand.length; i++) {
+            if (ordHand[i].getValor() == ordHand[i-1].getValor())
+                qtd++;
+            else {
+                qtd = 1;
+            }
+
+            if (qtd == 4)
+                return true;
+        }
+
+        return false;
     }
-    
+
     private static boolean fullHand(Carta[] ordHand) {
-    	return false;
+        Map<Carta.Valor, Integer> qtd = new HashMap<>();
+
+        for (int i = 0; i < ordHand.length; i++) {
+            int cur;
+            try {
+                cur = qtd.get(ordHand[i].getValor());
+            } catch (Exception ex) {
+                cur = 0;
+            }
+            qtd.put(ordHand[i].getValor(), cur + 1);
+        }
+
+        boolean hasTrinca = false, hasPair = false;
+
+        for (Carta.Valor cv : qtd.keySet()) {
+            int cur = qtd.get(cv);
+
+            if (cur == 2) hasPair = true;
+            if (cur == 3) hasTrinca = true;
+        }
+
+        return hasTrinca && hasPair;
     }
-    
+
     private static boolean straight(Carta[] ordHand) {
-    	for (int i = 1; i < ordHand.length; i++) {
-    		if (ordHand[i].getValor().ordinal() - ordHand[i - 1].getValor().ordinal() != 1) {
-    			return false;
-    		}
-    	}
-    	return true;
+        for (int i = 1; i < ordHand.length; i++) {
+            if (ordHand[i].getValor().ordinal() - ordHand[i - 1].getValor().ordinal() != 1) {
+                return false;
+            }
+        }
+        return true;
     }
-    
+
     private static boolean flush(Carta[] ordHand) {
-    	for (int i = 1; i < ordHand.length; i++) {
-    		if (ordHand[i].getNaipe() != ordHand[i - 1].getNaipe()) {
-    			return false;
-    		}
-    	}
-    	return true;
+        for (int i = 1; i < ordHand.length; i++) {
+            if (ordHand[i].getNaipe() != ordHand[i - 1].getNaipe()) {
+                return false;
+            }
+        }
+        return true;
     }
-    
+
     private static boolean royal(Carta[] ordHand) {
-    	int ord = Carta.Valor.V10.ordinal();
-    	for (int i = 0; i < ordHand.length; i++) {
-    		if (ordHand[i].getValor().ordinal() != ord + i) {
-    			return false;
-    		}
-    	}
-    	return true;
+        int ord = Carta.Valor.V10.ordinal();
+        for (int i = 0; i < ordHand.length; i++) {
+            if (ordHand[i].getValor().ordinal() != ord + i) {
+                return false;
+            }
+        }
+        return true;
     }
 }
