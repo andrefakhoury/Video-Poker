@@ -1,7 +1,7 @@
 public class Carta implements Comparable<Carta> {
 	
 	public static enum Naipe {
-		PAUS("♣"), COPAS("♥"), ESPADAS("♠"), OUROS("♦");
+		PAUS("\u2663"), COPAS("\u2665"), ESPADAS("\u2660"), OUROS("\u2666");
 		
 		private final String simbolo;
 

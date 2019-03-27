@@ -17,7 +17,7 @@ public class Hand {
         for (int i = 0; i < quais.length; i++) {
             try {
                 int c = Integer.parseInt(quais[i]) - 1;
-                hand[c] = baralho.getHand(2)[0];
+                hand[c] = baralho.getHand(1)[0];
             } catch (Exception ex) {
             }
         }
