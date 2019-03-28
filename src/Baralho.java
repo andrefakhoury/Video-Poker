@@ -6,6 +6,9 @@ public class Baralho {
 
     private LinkedList<Carta> baralho;
 
+    /**
+     * Cria um novo baralho com todas as cartas
+     */
     public Baralho() {
         Carta.Naipe[] naipes = Carta.Naipe.values();
         Carta.Valor[] valors = Carta.Valor.values();
@@ -18,14 +21,27 @@ public class Baralho {
         }
     }
 
+    /**
+     * Retorna a lista contendo todas as cartas do baralho
+     * @return as cartas do baralho
+     */
     public List<Carta> getBaralho() {
         return baralho;
     }
 
+    /**
+     * Remove 5 cartas do baralho e retorna essas cartas
+     * @return um array com 5 cartas
+     */
     public Carta[] getHand() {
         return getHand(5);
     }
 
+    /**
+     * Remove n cartas do baralho e retorna essas cartas
+     * @param n o numero de cartas
+     * @return um array com n cartas
+     */
     public Carta[] getHand(int n) {
         Carta[] hand = new Carta[n];
         for (int i = 0; i < n; i++) {
@@ -34,6 +50,9 @@ public class Baralho {
         return hand;
     }
 
+    /**
+     * Embaralha o baralho
+     */
     public void embaralhar() {
         Collections.shuffle(baralho);
     }
