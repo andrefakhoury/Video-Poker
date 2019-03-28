@@ -1,5 +1,3 @@
-
-
 public class Main {
 
     public static void main(String[] args) {
@@ -10,10 +8,10 @@ public class Main {
             System.out.println("Digite a quantidade que quer apostar.");
             int aposta = readInt();
             if (aposta < 0) {
-            	break;
+                break;
             }
             if (aposta > creditos || aposta == 0) {
-            	continue;
+                continue;
             }
             creditos -= aposta;
 
@@ -41,21 +39,21 @@ public class Main {
         } while (creditos > 0);
 
     }
-    
+
     private static int readInt() {
-    	try {
-    		return EntradaTeclado.leInt();
-    	} catch (Exception e) {
-			return 0;
-		}
+        try {
+            return EntradaTeclado.leInt();
+        } catch (Exception e) {
+            return 0;
+        }
     }
-    
+
     private static String readString() {
-    	try {
-    		return EntradaTeclado.leString();
-    	} catch (Exception e) {
-    		return "";
-    	}
+        try {
+            return EntradaTeclado.leString();
+        } catch (Exception e) {
+            return "";
+        }
     }
-    
+
 }
