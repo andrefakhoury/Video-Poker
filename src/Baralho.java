@@ -2,6 +2,11 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Classe que cria e gerencia um Baralho completo de cartas.
+ * @author Andre Luis Mendes Fakhoury - 4482145
+ * @author Gustavo Vinicius Vieira Silva Soares - 10734428
+ */
 public class Baralho {
 
     private LinkedList<Carta> baralho;

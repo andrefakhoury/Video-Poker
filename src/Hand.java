@@ -3,14 +3,16 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
- * Classe que armazena uma mao atual do jogador, a partir do baralho geral
+ * Armazena uma mão atual do jogador, a partir de um baralho com as cartas possíveis
+ * @author Andre Luis Mendes Fakhoury - 4482145
+ * @author Gustavo Vinicius Vieira Silva Soares - 10734428
  */
 public class Hand {
     private Baralho baralho; // baralho com as cartas possiveis
     private Carta[] hand; // mao atual do jogador
 
     /**
-     * Construtor da mao, recebe o baralho com as cartas possiveis
+     * Construtor da mão, recebe o baralho com as cartas possiveis
      * @param baralho baralho com as cartas possiveis
      */
     public Hand(Baralho baralho) {
@@ -19,7 +21,7 @@ public class Hand {
     }
 
     /**
-     * Troca os elementos da mao atual, a partir de uma string mandando os indices
+     * Troca os elementos da mão atual, a partir de uma string mandando os indices
      * @param s elementos que serao trocados
      */
     public void trocar(String s) {
@@ -35,8 +37,8 @@ public class Hand {
     }
 
     /**
-     * Retorna a string da mao atual, ou seja, as cartas
-     * @return mao atual do jogador
+     * Retorna a string da mão atual, ou seja, as cartas
+     * @return mão atual do jogador
      */
     public String toString() {
         //String ret = "";

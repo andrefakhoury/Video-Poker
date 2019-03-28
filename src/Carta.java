@@ -1,3 +1,8 @@
+/**
+ * Classe que armazena os valores de uma carta especifica.
+ * @author Andre Luis Mendes Fakhoury - 4482145
+ * @author Gustavo Vinicius Vieira Silva Soares - 10734428
+ */
 public class Carta implements Comparable<Carta> {
 
     /**
@@ -71,6 +76,11 @@ public class Carta implements Comparable<Carta> {
         return valor;
     }
 
+    /**
+     * Verifica se uma carta equivale a outra mandada por parametro.
+     * @param obj outro objeto a se conferir
+     * @return true se o objeto for uma carta igual a atual, diferente caso contrario
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Carta) {
@@ -79,6 +89,10 @@ public class Carta implements Comparable<Carta> {
         return false;
     }
 
+    /**
+     * Imprime uma arte da Carta atual
+     * @return
+     */
     @Override
     public String toString() {
         String ret = "+-----+\n";
@@ -91,6 +105,11 @@ public class Carta implements Comparable<Carta> {
         return ret;
     }
 
+    /**
+     * Operador de comparação de duas cartas, ordenando pelo valor, e desempatando pelo naipe.
+     * @param carta
+     * @return
+     */
     @Override
     public int compareTo(Carta carta) {
         return valor == carta.valor ? naipe.ordinal() - carta.naipe.ordinal() : valor.ordinal() - carta.valor.ordinal();
