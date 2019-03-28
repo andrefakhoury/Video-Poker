@@ -9,7 +9,7 @@ public class Carta implements Comparable<Carta> {
      * Todos os Naipes possiveis
      */
     public static enum Naipe {
-        PAUS("♣"), COPAS("♥"), ESPADAS("♠"), OUROS("♦");
+        PAUS("\u2663"), COPAS("\u2665"), ESPADAS("\u2660"), OUROS("\u2666");
 
         private final String simbolo; // simbolo de cada Naipe
 
