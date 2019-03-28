@@ -55,10 +55,18 @@ public class Carta implements Comparable<Carta> {
         this.valor = valor;
     }
 
+    /**
+     * Retorna o naipe da carta
+     * @return Naipe da carta
+     */
     public Naipe getNaipe() {
         return naipe;
     }
 
+    /**
+     * Retorna o valor da carta
+     * @return Valor da carta
+     */
     public Valor getValor() {
         return valor;
     }
