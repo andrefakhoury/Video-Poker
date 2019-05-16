@@ -67,6 +67,14 @@ public class Hand {
     }
 
     /**
+     * Retorna a hand
+     * @return a hand
+     */
+    public Carta[] getHand() {
+        return hand;
+    }
+
+    /**
      * Verifica as configuracoes da mão atual e gera o multiplicador para ela
      * @return multiplicador da mão atual
      */
