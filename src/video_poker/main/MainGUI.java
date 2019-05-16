@@ -7,7 +7,7 @@ public class MainGUI {
     public static void main(String[] args) {
         GUI gui = new GUI();
         JFrame frame = new JFrame();
-        frame.setSize(1280, 720);
+        frame.setSize(660, 300);
         frame.add(gui.$$$getRootComponent$$$());
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setVisible(true);

@@ -175,7 +175,7 @@ public class GUI {
             file = "./images/carta.png";
         }
         ImageIcon icon = new ImageIcon(file);
-        Image im = icon.getImage().getScaledInstance(50, 150, Image.SCALE_DEFAULT);
+        Image im = icon.getImage().getScaledInstance(75, 150, Image.SCALE_DEFAULT);
         return new ImageIcon(im);
     }
 
