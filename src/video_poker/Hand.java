@@ -42,6 +42,21 @@ public class Hand {
     }
 
     /**
+     * Troca os elementos da mão atual, a partir um array de booleano informando os indices
+     * @param troca elementos que serao trocados
+     */
+    public void trocar(boolean troca[]) {
+        String s = new String("");
+        for (int i = 0; i < troca.length; i++) {
+            if (troca[i]) {
+                s += (i + 1) + " ";
+            }
+        }
+
+        trocar(s);
+    }
+
+    /**
      * Retorna a string da mão atual, ou seja, as cartas
      * @return mão atual do jogador
      */

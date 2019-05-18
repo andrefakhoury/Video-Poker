@@ -12,7 +12,7 @@ public class GUI extends JFrame implements ActionListener {
     private JLabel lblTotalDinheiro, lblApostaAtual, lblAposta, lblCartas[];
     private JCheckBox ckbTrocaCarta[];
     private JFormattedTextField txtAposta;
-    private JButton btnConfirmaAposta, btnSair;
+    private JButton btnConfirmaAposta, btnSair, btnConfirmaCartas;
 
     private long creditos, aposta;
     private Baralho baralho;
@@ -33,18 +33,9 @@ public class GUI extends JFrame implements ActionListener {
             }
 
             iniciaJogo();
+        } else if (actionEvent.getSource().equals(btnConfirmaCartas)) {
+            trocaCartas();
         }
-    }
-
-    private void iniciaJogo() {
-        lblApostaAtual.setText("Valor da aposta atual: " + aposta);
-        panCartas.setVisible(true);
-        panAposta.setVisible(false);
-
-        panMain.remove(panAposta);
-        panMain.remove(panSair);
-        panMain.add(panCartas);
-        panMain.add(panSair);
     }
 
     private Icon getCardIcon(int i) {
@@ -64,7 +55,36 @@ public class GUI extends JFrame implements ActionListener {
 
     private String getCardName(int i) {
         Carta c = hand == null ? null : hand.getHand(i);
-        return c == null ? "NULL" : c.getNaipe() + " " + c.getValor();
+        return c == null ? "NULL" : c.getNaipe().getSimbolo() + " " + c.getValor();
+    }
+
+    private void atualizaCartas() {
+        for (int i = 0; i < 5; i++) {
+            lblCartas[i].setIcon(getCardIcon(i));
+            ckbTrocaCarta[i].setText(getCardName(i));
+            ckbTrocaCarta[i].setSelected(false);
+        }
+    }
+
+    private void iniciaJogo() {
+        lblApostaAtual.setText("Valor da aposta atual: " + aposta);
+        panCartas.setVisible(true);
+        panAposta.setVisible(false);
+
+        panMain.remove(panAposta);
+        panMain.remove(panSair);
+        panMain.add(panCartas);
+        panMain.add(panSair);
+    }
+
+    private void trocaCartas() {
+        boolean trocar[] = new boolean[5];
+        for (int i = 0; i < 5; i++) {
+            trocar[i] = ckbTrocaCarta[i].isSelected();
+        }
+
+        hand.trocar(trocar);
+        atualizaCartas();
     }
 
     public GUI() {
@@ -74,9 +94,12 @@ public class GUI extends JFrame implements ActionListener {
         this.setLocationRelativeTo(null);
 
         creditos = 200;
+        baralho = new Baralho();
+        baralho.embaralhar();
+        hand = new Hand(baralho);
 
         // JPanel principal, que vai abrigar todos os componentes
-        panMain = new JPanel();
+        panMain = new JPanel(new GridLayout(0, 1));
         this.add(panMain);
 
         // JPanel de informacoes atuais - dinheiro e aposta
@@ -91,14 +114,10 @@ public class GUI extends JFrame implements ActionListener {
 
         // JPanel inicial, que pergunta as informacoes iniciais
         panAposta = new JPanel();
-        panAposta.setSize(500, 500);
-
 
         lblAposta = new JLabel("Digite o quanto quer apostar:");
         txtAposta = new JFormattedTextField();
         txtAposta.setValue(300);
-
-        txtAposta.setSize(300, txtAposta.getHeight());
 
         btnConfirmaAposta = new JButton("Confirma");
         btnConfirmaAposta.addActionListener(this);
@@ -114,23 +133,28 @@ public class GUI extends JFrame implements ActionListener {
         btnSair.addActionListener(this);
         panSair.add(btnSair);
 
-        // JP
-        panCartas = new JPanel(new GridLayout(5, 0));
+        // JPanel que abriga as cartas
+        panCartas = new JPanel(new GridLayout(0, 5));
         panCartas.setSize(panCartas.getWidth(), 300);
         lblCartas = new JLabel[5];
         ckbTrocaCarta = new JCheckBox[5];
         for (int i = 0; i < 5; i++) {
-            lblCartas[i] = new JLabel("OIEIEE" + i);
+            lblCartas[i] = new JLabel();
             lblCartas[i].setBounds(lblCartas[i].getX(), lblCartas[i].getY(), 100, 150);
-            lblCartas[i].setIcon(getCardIcon(i));
-            lblCartas[i].setText(getCardName(i));
             panCartas.add(lblCartas[i]);
+        }
 
+        for (int i = 0; i < 5; i++) {
             ckbTrocaCarta[i] = new JCheckBox();
             panCartas.add(ckbTrocaCarta[i]);
         }
-        panCartas.setVisible(false);
 
+        atualizaCartas();
+
+        btnConfirmaCartas = new JButton("Confirmar");
+        btnConfirmaCartas.addActionListener(this);
+        panCartas.add(btnConfirmaCartas);
+        panCartas.setVisible(false);
 
         panMain.add(panInfo);
         panMain.add(panAposta);
