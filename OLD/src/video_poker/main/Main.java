@@ -1,7 +1,7 @@
 package video_poker.main;
 
-import entrada_teclado.EntradaTeclado;
 import video_poker.Baralho;
+import entrada_teclado.EntradaTeclado;
 import video_poker.Hand;
 
 /**

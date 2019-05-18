@@ -53,7 +53,7 @@ public class Carta implements Comparable<Carta> {
     private final Valor valor;
 
     /**
-     * Construtor da video_poker.video_poker.Carta, recebe o naipe e o valor
+     * Construtor da video_poker.Carta, recebe o naipe e o valor
      * @param naipe
      * @param valor
      */
@@ -92,7 +92,7 @@ public class Carta implements Comparable<Carta> {
     }
 
     /**
-     * Imprime uma arte da video_poker.video_poker.Carta atual
+     * Imprime uma arte da video_poker.Carta atual
      * @return
      */
     @Override

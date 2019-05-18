@@ -1,8 +1,5 @@
 package video_poker;
 
-import video_poker.Baralho;
-import video_poker.Carta;
-
 import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
@@ -75,18 +72,6 @@ public class Hand {
      */
     public Carta[] getHand() {
         return hand;
-    }
-
-    /**
-     * Retorna carta especifica da hand
-     * @return carta de indice i da hand
-     */
-    public Carta getHand(int i) {
-        if (i < 0 || i >= hand.length) {
-            return null;
-        }
-
-        return hand[i];
     }
 
     /**

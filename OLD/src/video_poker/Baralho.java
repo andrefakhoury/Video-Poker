@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Classe que cria e gerencia um video_poker.video_poker.Baralho completo de cartas.
+ * Classe que cria e gerencia um video_poker.Baralho completo de cartas.
  * @author Andre Luis Mendes Fakhoury - 4482145
  * @author Gustavo Vinicius Vieira Silva Soares - 10734428
  */
