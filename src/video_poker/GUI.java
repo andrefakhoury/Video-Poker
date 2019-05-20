@@ -1,20 +1,22 @@
 package video_poker;
 
 import javax.swing.*;
-import javax.xml.stream.Location;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GUI extends JFrame implements ActionListener {
 
-    private JPanel panMain, panInfo, panAposta, panSair, panCartas;
-    private JLabel lblTotalDinheiro, lblApostaAtual, lblAposta, lblCartas[];
+    // Componentes do frame
+    private JPanel panMain, panInfo, panAposta, panSair, panCartas, panFimJogo;
+    private JLabel lblTotalDinheiro, lblApostaAtual, lblAposta, lblCartas[], lblFimJogo, lblPontuacaoFinal;
     private JCheckBox ckbTrocaCarta[];
-    private JFormattedTextField txtAposta;
-    private JButton btnConfirmaAposta, btnSair, btnConfirmaCartas;
+    private JTextField txtAposta;
+    private JButton btnConfirmaAposta, btnFinaliza, btnSair, btnConfirmaCartas;
 
+    // variaveis auxiliares para a logica
     private long creditos, aposta;
+    private int numJogadas;
     private Baralho baralho;
     private Hand hand;
 
@@ -26,38 +28,83 @@ public class GUI extends JFrame implements ActionListener {
             }
         } else if (actionEvent.getSource().equals(btnConfirmaAposta)) {
             try {
-                aposta = (Integer)(txtAposta.getValue());
+                aposta = Integer.parseInt(txtAposta.getText());
             } catch (Exception ex) {
+                aposta = -1;
+            }
+
+            if (aposta <= 0 || aposta > creditos) {
                 JOptionPane.showMessageDialog(this, "Valor invalido!", "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            iniciaJogo();
+            iniciaRodada();
         } else if (actionEvent.getSource().equals(btnConfirmaCartas)) {
-            trocaCartas();
+            if (numJogadas == 1) {
+                encerraRodada();
+            } else {
+                trocaCartas();
+            }
+        } else if (actionEvent.getSource().equals(btnFinaliza)) {
+            encerraJogo();
         }
     }
 
+    /**
+     * Funcao para pegar o icone de uma carta
+     * @param i indice da mao atual
+     * @return icone para a carta do indice i da mao atual
+     */
     private Icon getCardIcon(int i) {
-        Carta c = hand == null ? null : hand.getHand()[i];
+        Carta c = hand == null ? null : hand.getHand(i);
         String file;
 
         if (c == null) {
-            file = "./images/test.png";
+            file = "./images/ERROR.jpg";
         } else {
-            file = "./images/carta.png";
+            String naipe = "";
+            String valor = c.getValor().getSimbolo();
+
+            if(c.getNaipe().equals(Carta.Naipe.PAUS)) {
+                naipe = "C";
+            } else if (c.getNaipe().equals(Carta.Naipe.OUROS)) {
+                naipe = "D";
+            } else if (c.getNaipe().equals(Carta.Naipe.ESPADAS)) {
+                naipe = "S";
+            } else if (c.getNaipe().equals(Carta.Naipe.COPAS)) {
+                naipe = "H";
+            }
+
+            file = "./images/" + valor + naipe + ".jpg";
         }
 
-        ImageIcon icon = new ImageIcon(file);
-        Image im = icon.getImage().getScaledInstance(100, 150, Image.SCALE_DEFAULT);
+        ImageIcon icon = new ImageIcon();
+        Image im;
+
+        try {
+            icon = new ImageIcon(file);
+        } catch (Exception ex) {
+            icon = new ImageIcon("./images/ERROR.jpg");
+        } finally {
+            im = icon.getImage().getScaledInstance(60, 85, Image.SCALE_DEFAULT);
+        }
+
         return new ImageIcon(im);
     }
 
+    /**
+     * Retorna o nome da carta atual
+     * @param i indice da carta da mao atual
+     * @return nome da carta
+     */
     private String getCardName(int i) {
         Carta c = hand == null ? null : hand.getHand(i);
         return c == null ? "NULL" : c.getNaipe().getSimbolo() + " " + c.getValor();
     }
 
+    /**
+     * Atualiza o icone e texto das cartas atuais
+     */
     private void atualizaCartas() {
         for (int i = 0; i < 5; i++) {
             lblCartas[i].setIcon(getCardIcon(i));
@@ -66,8 +113,22 @@ public class GUI extends JFrame implements ActionListener {
         }
     }
 
-    private void iniciaJogo() {
+    /**
+     * Inicia a rodada atual, ajeitando todas as variaveis auxiliares
+     */
+    private void iniciaRodada() {
+        baralho = new Baralho();
+        baralho.embaralhar();
+        hand = new Hand(baralho);
+        atualizaCartas();
+
+        txtAposta.setText("");
+
         lblApostaAtual.setText("Valor da aposta atual: " + aposta);
+
+        creditos -= aposta;
+        lblTotalDinheiro.setText("Dinheiro total disponivel: " + creditos);
+
         panCartas.setVisible(true);
         panAposta.setVisible(false);
 
@@ -75,8 +136,13 @@ public class GUI extends JFrame implements ActionListener {
         panMain.remove(panSair);
         panMain.add(panCartas);
         panMain.add(panSair);
+
+        numJogadas = 0;
     }
 
+    /**
+     * Troca as cartas selecionadas
+     */
     private void trocaCartas() {
         boolean trocar[] = new boolean[5];
         for (int i = 0; i < 5; i++) {
@@ -85,18 +151,61 @@ public class GUI extends JFrame implements ActionListener {
 
         hand.trocar(trocar);
         atualizaCartas();
+        numJogadas++;
     }
 
+    /**
+     * Encerra a rodada atual, informando o profit
+     */
+    private void encerraRodada() {
+        int mult = hand.multiplicadorMao();
+        JOptionPane.showMessageDialog(this, "Profit de " + mult + "x!", "Profit", JOptionPane.INFORMATION_MESSAGE);
+
+        creditos += aposta * mult;
+
+        lblTotalDinheiro.setText("Dinheiro total disponivel: " + creditos);
+        lblApostaAtual = new JLabel("Valor da aposta atual: ---");
+
+        if (creditos <= 0) {
+            encerraJogo();
+        }
+
+        panCartas.setVisible(false);
+        panMain.remove(panCartas);
+        panMain.remove(panSair);
+        panAposta.setVisible(true);
+        panMain.add(panAposta);
+        panMain.add(panSair);
+    }
+
+    /**
+     * Encerra o jogo, informando a pontuacao final
+     */
+    private void encerraJogo() {
+        lblPontuacaoFinal.setText(creditos + " pontos!");
+
+        panCartas.setVisible(false);
+        panAposta.setVisible(false);
+        panFimJogo.setVisible(true);
+
+        panMain.remove(panCartas);
+        panMain.remove(panAposta);
+        panMain.remove(panSair);
+
+        panMain.add(panFimJogo);
+        panMain.add(panSair);
+    }
+
+    /**
+     * Constroi todos os componentes
+     */
     public GUI() {
         super("Video Poker - User Interface Edition");
-        this.setSize(800, 500);
+        this.setSize(920, 720);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
 
         creditos = 200;
-        baralho = new Baralho();
-        baralho.embaralhar();
-        hand = new Hand(baralho);
 
         // JPanel principal, que vai abrigar todos os componentes
         panMain = new JPanel(new GridLayout(0, 1));
@@ -113,18 +222,22 @@ public class GUI extends JFrame implements ActionListener {
         panInfo.add(lblApostaAtual);
 
         // JPanel inicial, que pergunta as informacoes iniciais
-        panAposta = new JPanel();
+        panAposta = new JPanel(new GridLayout(2, 2));
 
         lblAposta = new JLabel("Digite o quanto quer apostar:");
-        txtAposta = new JFormattedTextField();
-        txtAposta.setValue(300);
+        txtAposta = new JTextField();
+        txtAposta.setSize(400, txtAposta.getHeight());
 
         btnConfirmaAposta = new JButton("Confirma");
         btnConfirmaAposta.addActionListener(this);
 
+        btnFinaliza = new JButton("Parar de jogar");
+        btnFinaliza.addActionListener(this);
+
         panAposta.add(lblAposta);
         panAposta.add(txtAposta);
         panAposta.add(btnConfirmaAposta);
+        panAposta.add(btnFinaliza);
 
         // JPanel que abriga o botao de sair
         panSair = new JPanel();
@@ -156,11 +269,17 @@ public class GUI extends JFrame implements ActionListener {
         panCartas.add(btnConfirmaCartas);
         panCartas.setVisible(false);
 
+        // JPanel de fim de jogo
+        panFimJogo = new JPanel(new GridLayout(0, 1));
+        lblFimJogo = new JLabel("Fim de jogo! Pontuacao final:");
+        lblPontuacaoFinal = new JLabel("0");
+        panFimJogo.add(lblFimJogo);
+        panFimJogo.add(lblPontuacaoFinal);
+
         panMain.add(panInfo);
         panMain.add(panAposta);
         panMain.add(panSair);
 
         this.setVisible(true);
     }
-
 }

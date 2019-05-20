@@ -1,7 +1,7 @@
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import video_poker.Carta;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class CartaTest {
     @Test

@@ -1,4 +1,7 @@
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 import video_poker.Baralho;
 import video_poker.Carta;
 import video_poker.Hand;
@@ -6,8 +9,6 @@ import video_poker.Hand;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class HandTest {
 

@@ -1,18 +1,18 @@
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
 import video_poker.Baralho;
 import video_poker.Carta;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 public class BaralhoTest {
     Baralho b;
 
-    @BeforeEach
+    @Before
     public void setup() {
         b = new Baralho();
     }
+
 
     @Test
     public void getBaralho() {
