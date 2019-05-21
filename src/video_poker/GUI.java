@@ -40,7 +40,7 @@ public class GUI extends JFrame implements ActionListener {
 
             iniciaRodada();
         } else if (actionEvent.getSource().equals(btnConfirmaCartas)) {
-            if (numJogadas == 1) {
+            if (numJogadas == 2) {
                 encerraRodada();
             } else {
                 trocaCartas();
@@ -110,6 +110,12 @@ public class GUI extends JFrame implements ActionListener {
             lblCartas[i].setIcon(getCardIcon(i));
             ckbTrocaCarta[i].setText(getCardName(i));
             ckbTrocaCarta[i].setSelected(false);
+
+            if (numJogadas == 1) {
+                ckbTrocaCarta[i].setEnabled(false);
+            } else {
+                ckbTrocaCarta[i].setEnabled(true);
+            }
         }
     }
 
@@ -125,6 +131,8 @@ public class GUI extends JFrame implements ActionListener {
         txtAposta.setText("");
 
         lblApostaAtual.setText("Valor da aposta atual: " + aposta);
+
+        btnConfirmaCartas.setText("Confirmar");
 
         creditos -= aposta;
         lblTotalDinheiro.setText("Dinheiro total disponivel: " + creditos);
@@ -149,6 +157,10 @@ public class GUI extends JFrame implements ActionListener {
             trocar[i] = ckbTrocaCarta[i].isSelected();
         }
 
+        if (numJogadas == 1) {
+            btnConfirmaCartas.setText("Finalizar");
+        }
+
         hand.trocar(trocar);
         atualizaCartas();
         numJogadas++;
@@ -164,7 +176,7 @@ public class GUI extends JFrame implements ActionListener {
         creditos += aposta * mult;
 
         lblTotalDinheiro.setText("Dinheiro total disponivel: " + creditos);
-        lblApostaAtual = new JLabel("Valor da aposta atual: ---");
+        lblApostaAtual.setText("Valor da aposta atual: ---");
 
         if (creditos <= 0) {
             encerraJogo();
