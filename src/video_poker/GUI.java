@@ -8,11 +8,13 @@ import java.awt.event.ActionListener;
 public class GUI extends JFrame implements ActionListener {
 
     // Componentes do frame
-    private JPanel panMain, panInfo, panAposta, panSair, panCartas, panFimJogo;
-    private JLabel lblTotalDinheiro, lblApostaAtual, lblAposta, lblCartas[], lblFimJogo, lblPontuacaoFinal;
+    private JPanel panMain, panInfo, panAposta, panCartas, panFimJogo;
+    private JLabel lblTotalDinheiro, lblApostaAtual, lblAposta, lblCartas[], lblFimJogo;
     private JCheckBox ckbTrocaCarta[];
     private JTextField txtAposta;
-    private JButton btnConfirmaAposta, btnFinaliza, btnSair, btnConfirmaCartas;
+    private JButton btnConfirmaAposta, btnFinaliza, btnConfirmaCartas;
+
+    private final int cardWidth = 180, cardHeight = 300;
 
     // variaveis auxiliares para a logica
     private long creditos, aposta;
@@ -22,11 +24,7 @@ public class GUI extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        if (actionEvent.getSource().equals(btnSair)) {
-            if (JOptionPane.showConfirmDialog(this, "Deseja realmente sair?", "Sair", 0) == 0) {
-                System.exit(0);
-            }
-        } else if (actionEvent.getSource().equals(btnConfirmaAposta)) {
+        if (actionEvent.getSource().equals(btnConfirmaAposta)) {
             try {
                 aposta = Integer.parseInt(txtAposta.getText());
             } catch (Exception ex) {
@@ -86,7 +84,7 @@ public class GUI extends JFrame implements ActionListener {
         } catch (Exception ex) {
             icon = new ImageIcon("./images/ERROR.jpg");
         } finally {
-            im = icon.getImage().getScaledInstance(60, 85, Image.SCALE_DEFAULT);
+            im = icon.getImage().getScaledInstance(cardWidth, cardHeight, Image.SCALE_DEFAULT);
         }
 
         return new ImageIcon(im);
@@ -141,9 +139,7 @@ public class GUI extends JFrame implements ActionListener {
         panAposta.setVisible(false);
 
         panMain.remove(panAposta);
-        panMain.remove(panSair);
         panMain.add(panCartas);
-        panMain.add(panSair);
 
         numJogadas = 0;
     }
@@ -152,9 +148,18 @@ public class GUI extends JFrame implements ActionListener {
      * Troca as cartas selecionadas
      */
     private void trocaCartas() {
+
+        int cnt = 0;
+
         boolean trocar[] = new boolean[5];
         for (int i = 0; i < 5; i++) {
             trocar[i] = ckbTrocaCarta[i].isSelected();
+            cnt += ckbTrocaCarta[i].isSelected() ? 1 : 0;
+        }
+
+        if (cnt == 0) {
+            numJogadas = 2;
+            encerraRodada();
         }
 
         if (numJogadas == 1) {
@@ -184,17 +189,15 @@ public class GUI extends JFrame implements ActionListener {
 
         panCartas.setVisible(false);
         panMain.remove(panCartas);
-        panMain.remove(panSair);
         panAposta.setVisible(true);
         panMain.add(panAposta);
-        panMain.add(panSair);
     }
 
     /**
      * Encerra o jogo, informando a pontuacao final
      */
     private void encerraJogo() {
-        lblPontuacaoFinal.setText(creditos + " pontos!");
+        lblFimJogo.setText("Fim de jogo! Pontuacao final: " + creditos);
 
         panCartas.setVisible(false);
         panAposta.setVisible(false);
@@ -202,10 +205,8 @@ public class GUI extends JFrame implements ActionListener {
 
         panMain.remove(panCartas);
         panMain.remove(panAposta);
-        panMain.remove(panSair);
 
         panMain.add(panFimJogo);
-        panMain.add(panSair);
     }
 
     /**
@@ -220,7 +221,7 @@ public class GUI extends JFrame implements ActionListener {
         creditos = 200;
 
         // JPanel principal, que vai abrigar todos os componentes
-        panMain = new JPanel(new GridLayout(0, 1));
+        panMain = new JPanel(null);
         this.add(panMain);
 
         // JPanel de informacoes atuais - dinheiro e aposta
@@ -234,7 +235,8 @@ public class GUI extends JFrame implements ActionListener {
         panInfo.add(lblApostaAtual);
 
         // JPanel inicial, que pergunta as informacoes iniciais
-        panAposta = new JPanel(new GridLayout(2, 2));
+        panAposta = new JPanel(new GridLayout(20, 2));
+        panAposta.setBounds(0, panInfo.getHeight(), this.getWidth(), 720 - panInfo.getHeight());
 
         lblAposta = new JLabel("Digite o quanto quer apostar:");
         txtAposta = new JTextField();
@@ -251,26 +253,22 @@ public class GUI extends JFrame implements ActionListener {
         panAposta.add(btnConfirmaAposta);
         panAposta.add(btnFinaliza);
 
-        // JPanel que abriga o botao de sair
-        panSair = new JPanel();
-        btnSair = new JButton("Sair");
-        btnSair.setBounds(btnSair.getX() + 100, btnSair.getY(), 300, btnSair.getHeight());
-        btnSair.addActionListener(this);
-        panSair.add(btnSair);
-
         // JPanel que abriga as cartas
-        panCartas = new JPanel(new GridLayout(0, 5));
-        panCartas.setSize(panCartas.getWidth(), 300);
+        panCartas = new JPanel(null);
+        panCartas.setBounds(0, panInfo.getHeight(), this.getWidth(), 720 - panInfo.getHeight());
+
         lblCartas = new JLabel[5];
         ckbTrocaCarta = new JCheckBox[5];
         for (int i = 0; i < 5; i++) {
             lblCartas[i] = new JLabel();
-            lblCartas[i].setBounds(lblCartas[i].getX(), lblCartas[i].getY(), 100, 150);
+            lblCartas[i].setBounds(5 + cardWidth * i, 100, cardWidth, cardHeight);
+
             panCartas.add(lblCartas[i]);
         }
 
         for (int i = 0; i < 5; i++) {
             ckbTrocaCarta[i] = new JCheckBox();
+            ckbTrocaCarta[i].setBounds(5 + cardWidth * i, 100 + cardHeight, cardWidth, 20);
             panCartas.add(ckbTrocaCarta[i]);
         }
 
@@ -278,19 +276,20 @@ public class GUI extends JFrame implements ActionListener {
 
         btnConfirmaCartas = new JButton("Confirmar");
         btnConfirmaCartas.addActionListener(this);
+        btnConfirmaCartas.setBounds(330, 500, 300, 25);
+
         panCartas.add(btnConfirmaCartas);
         panCartas.setVisible(false);
 
         // JPanel de fim de jogo
-        panFimJogo = new JPanel(new GridLayout(0, 1));
-        lblFimJogo = new JLabel("Fim de jogo! Pontuacao final:");
-        lblPontuacaoFinal = new JLabel("0");
+        panFimJogo = new JPanel();
+        panFimJogo.setBounds(0, panInfo.getHeight(), this.getWidth(), 720 - panInfo.getHeight());
+        lblFimJogo = new JLabel("Fim de jogo! Pontuacao final: 0");
+        lblFimJogo.setFont(new Font(lblFimJogo.getName(), Font.BOLD, 30));
         panFimJogo.add(lblFimJogo);
-        panFimJogo.add(lblPontuacaoFinal);
 
         panMain.add(panInfo);
         panMain.add(panAposta);
-        panMain.add(panSair);
 
         this.setVisible(true);
     }

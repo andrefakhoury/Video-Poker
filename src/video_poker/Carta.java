@@ -32,7 +32,7 @@ public class Carta implements Comparable<Carta> {
      * Todos os valores possiveis, com seus respectivos simbolos
      */
     public static enum Valor {
-        V2("2"), V3("3"), V4("4"), V5("5"), V6("6"), V7("7"), V8("8"), V9("9"), V10("10"), JOKER("J"), QUEEN("Q"), KING("K"), ACE("A");
+        V2("2"), V3("3"), V4("4"), V5("5"), V6("6"), V7("7"), V8("8"), V9("9"), V10("10"), JACK("J"), QUEEN("Q"), KING("K"), ACE("A");
 
         private final String simbolo;
 
