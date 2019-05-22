@@ -160,6 +160,7 @@ public class GUI extends JFrame implements ActionListener {
         if (cnt == 0) {
             numJogadas = 2;
             encerraRodada();
+            return;
         }
 
         if (numJogadas == 1) {
